@@ -24,10 +24,11 @@ def run():
     df_daily_ret_cum = (df_daily_ret+1).cumprod().dropna(how='all')
     print('stocks available :', list(d.keys()))
     print('capital available :')
-    list_input = input('write the stocks you wanna invest in followed by the respective notional amount : ').split()
+    list_input = input('write the stocks you wanna invest in, followed by the respective notional amount : ').split()
     list_stocks = [ list_input[i] for i in range(0,len(list_input),2) ]
     notional_stocks = np.array( [ int(list_input[i]) for i in range(1,len(list_input),2) ] )
-    weight_stocks = notional_stocks/sum(notional_stocks)
+    input_money = sum(notional_stocks)
+    weight_stocks = notional_stocks/sum(notional_stocks)/input_money
 
     df_weight = pd.DataFrame(index = df_price.index, columns = list_stocks )
     for i,item in enumerate(list_stocks):
@@ -37,8 +38,16 @@ def run():
     df_port['total_return'] = (df_daily_ret[list_stocks]*df_weight).sum(axis = 1)
     df_port['portfolio'] = (df_port['total_return']).cumsum()+1
 
-    tot_ret = 100*(df_port.portfolio.iloc[-1]-df_port.portfolio.iloc[0])/df_port.portfolio.iloc[0]
-    print('total return of the portfolio ', tot_ret , '%')
+    tot_ret = (df_port.portfolio.iloc[-1]-df_port.portfolio.iloc[0])/df_port.portfolio.iloc[0]
+    output_money = (1+tot_ret) * input_money
+    delta_money = output_money - input_money
+    if delta_money >= 0 :
+        print('money made :', delta_money)
+    else :
+        print('money loss :', abs(delta_money))
+    print('total return of the portfolio ', 100 * tot_ret , '%')
+    print('equity capital at the end of the period : ', output_money)
+    df_port['portfolio'].plot()
 
 if __name__ == '__main__':
     run()
