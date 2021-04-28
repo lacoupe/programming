@@ -20,7 +20,7 @@ def stock_simulation():
     nestlo_desc = 'milk company'
     gold_desc = 'something that is precious'
 
-    eatcoin = Stock('Gritecoin','very_high', eatcoin_desc, number_years)
+    eatcoin = Stock('Eatcoin','very_high', eatcoin_desc, number_years)
     teslo = Stock('Teslo','high', teslo_desc, number_years)
     nestlo = Stock('Nestlo','medium', nestlo_desc, number_years)
     gold = Stock('Gold','low',gold_desc, number_years)
@@ -35,27 +35,27 @@ def stock_simulation():
     df_daily_ret = df_price.pct_change(1).fillna(0) # dataframe of the daily returns
     df_daily_ret_cum = 100*(df_daily_ret+1).cumprod().dropna(how='all')
 
-    print('stocks available :', end = ' ')
-    for stock_name in d.keys():
-        if stock_name == list(d.keys())[-1]:
-            print(stock_name)
-        else :
-            print(stock_name, end = ', ')
-
-    capital = 10000
-    print(f'capital available : ${capital}')
-
     #######################################################################
 
     ### INPUT COMMAND
 
-    list_input = []
     list_stocks = []
     notional_stocks = []
+    temp_list = list(d.keys())
+    capital = 10000
+
     while True:
+        print('stocks available :', end = ' ')
+        for stock_name in temp_list:
+            if stock_name == temp_list[-1]:
+                print(stock_name)
+            else :
+                print(stock_name, end = ', ')   
+        print(f'capital available : ${capital}')
         try:
             stock = str(input('stock name : ("ok" to end) '))
             if stock == 'ok': # the user write "ok" if he does not want to invest more
+                print('*' * 50)
                 break
             if stock not in list(d.keys()):
                 raise ValueError
@@ -83,18 +83,17 @@ def stock_simulation():
             else:
                 list_stocks.append(stock)
                 notional_stocks.append(amount)
-                capital = capital - amount
-                print(f'capital available : ${capital}')
+                capital = capital - amount            
+                temp_list.remove(stock)  
                 break
         if capital == 0:
+            print('*' * 50)
             break
         
 
-    print(list_stocks)
-    print(notional_stocks)
-
-
-    # list_input = ['Gold', '5000', 'Eatcoin', '5000'] # premade_list for practice without typing input
+    # notional_stocks = [5000,5000]
+    # list_stocks = ['Gold','Eatcoin']
+    
 
     #######################################################################
 
@@ -110,7 +109,7 @@ def stock_simulation():
 
     df_port = pd.DataFrame()
     df_port['total_return'] = (df_daily_ret[list_stocks]*df_weights).sum(axis = 1)
-    df_port['portfolio'] = input_money*((df_port['total_return']).cumsum()+1)
+    df_port['portfolio'] = input_money*((df_port['total_return']+1).cumprod())
 
     tot_ret = (df_port.portfolio.iloc[-1]-df_port.portfolio.iloc[0])/df_port.portfolio.iloc[0]
     output_money = (1+tot_ret) * input_money
@@ -144,4 +143,3 @@ def stock_simulation():
 
 if __name__ == '__main__':
     stock_simulation()
-

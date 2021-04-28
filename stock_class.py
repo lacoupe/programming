@@ -22,16 +22,32 @@ class Stock:
         self.description = description
         self.years = number_years
 
-        if risk == 'high':
+        if risk == 'very_high':
+            self.mu = 0.3
+            self.sigma = 0.6
+            self.lam = 10
+            self.m = 0
+            self.v = 0.2
+        elif risk == 'high':
+            self.mu = 0.2
             self.sigma = 0.4
+            self.lam = 2
+            self.m = -0.1
+            self.v = 0.1
         elif risk == 'medium':
+            self.mu = 0.15
             self.sigma = 0.2
+            self.lam = 1
+            self.m = -0.05
+            self.v = 0.1
         elif risk == 'low':
+            self.mu = 0.1
             self.sigma = 0.05
-        elif risk == 'very_high':
-            self.sigma = 0.7
+            self.lam = 0.2
+            self.m = 0
+            self.v = 0.05
         
-        self.price = create_price(sigma = self.sigma, years = self.years)
+        self.price = create_price(mu = self.mu, sigma = self.sigma, years = self.years, lam = self.lam, m = self.m, v = self.v)
 
 
     def info(self):
