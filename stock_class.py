@@ -14,12 +14,14 @@ def create_price(mu = 0.2, sigma = 0.2, years = 1, lam = 1, m = -0.1, v = 0.1):
 
     return np.exp(np.cumsum((mu-sigma**2/2) * dt + sigma * zt_stock) + np.multiply(nt,zt_jump).cumsum(axis = 0) )
 
-class Stock():
+class Stock:
 
-    def __init__(self, name, risk, description):
+    def __init__(self, name, risk, description, number_years):
         self.name = name
         self.risk = risk
         self.description = description
+        self.years = number_years
+
         if risk == 'high':
             self.sigma = 0.4
         elif risk == 'medium':
@@ -28,7 +30,9 @@ class Stock():
             self.sigma = 0.05
         elif risk == 'very_high':
             self.sigma = 0.7
-        self.price = create_price(sigma = self.sigma)
+        
+        self.price = create_price(sigma = self.sigma, years = self.years)
+
 
     def info(self):
         print('Information of the stock :')
