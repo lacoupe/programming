@@ -13,7 +13,7 @@ def stock_simulation():
 
     ### DATA
 
-    number_years = 2
+    number_years = 1
 
     eatcoin_desc = 'best cryptocurrency'
     teslo_desc = 'electric car company'
@@ -43,7 +43,7 @@ def stock_simulation():
     notional_stocks = []
     temp_list = list(d.keys())
     capital = 10000
-
+    print( 'BIENVENIDO AL JUEGO DE LA BOLSA! Try not to loose money :) ')
     while True:
         print('stocks available :', end = ' ')
         for stock_name in temp_list:
@@ -74,7 +74,7 @@ def stock_simulation():
                 if amount <= 0:
                     print('Enter a positive amount, short selling not allowed')
                     continue
-                elif capital <0:
+                elif capital < amount:
                     print('You have not enough cash')
                     continue
                 else:
