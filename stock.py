@@ -28,9 +28,12 @@ def stock_simulation():
     number_days = number_years * 365
     today = datetime.datetime.today() # datetime simulation
     date_list = [today + datetime.timedelta(days=x) for x in range(number_days)] 
-    d = {eatcoin.name : eatcoin.price , teslo.name : teslo.price, \
+    d_price = {eatcoin.name : eatcoin.price , teslo.name : teslo.price, \
      nestlo.name : nestlo.price, gold.name : gold.price}
-    df_price = pd.DataFrame(data = d, index = date_list)
+    df_price = pd.DataFrame(data = d_price, index = date_list)
+
+    d_desc = {eatcoin.name : eatcoin.description , teslo.name : teslo.description, \
+     nestlo.name : nestlo.description, gold.name : gold.description}
 
     df_daily_ret = df_price.pct_change(1).fillna(0) # dataframe of the daily returns
     df_daily_ret_cum = 100*(df_daily_ret+1).cumprod().dropna(how='all')
@@ -38,12 +41,41 @@ def stock_simulation():
     #######################################################################
 
     ### INPUT COMMAND
+    
+    temp_list = list(d_price.keys())
+
+    print( '\n' + '*'*60 + '\n' + 'BIENVENIDO AL JUEGO DE LA BOLSA! Try not to loose money :) ')
+    print('The stocks available in this simulation are :', end = ' ')
+    for stock_name in temp_list:
+        if stock_name == temp_list[-1]:
+            print(stock_name)
+        else :
+            print(stock_name, end = ', ') 
+    i = 0
+    while True:
+        try:
+            if i == 0 :
+                choice = str(input('Do you want an info on a particular stock ? (yes/no) '))
+            else :
+                choice = str(input('Do you want another info on another particular stock ? (yes/no) '))
+            if choice not in ('yes','no'):
+                raise ValueError
+            if choice == 'yes':
+                stock_name = str(input('On which particular stock? : '))
+                print(d_desc[stock_name])
+                i += 1
+                continue
+            if choice == 'no':
+                break
+        except ValueError:
+                print('Enter "yes" or "no" with no capital letter ')
+                continue
 
     list_stocks = []
     notional_stocks = []
-    temp_list = list(d.keys())
+    temp_list = list(d_price.keys())
     capital = 10000
-    print( 'BIENVENIDO AL JUEGO DE LA BOLSA! Try not to loose money :) ')
+    
     while True:
         print('stocks available :', end = ' ')
         for stock_name in temp_list:
@@ -57,10 +89,10 @@ def stock_simulation():
             if stock == 'ok': # the user write "ok" if he does not want to invest more
                 print('*' * 50)
                 break
-            if stock not in list(d.keys()):
+            if stock not in temp_list:
                 raise ValueError
         except ValueError:
-            print('Enter a valid stock name :')
+            print('ERROR! Enter a valid stock name :')
             continue
 
         while True:
@@ -72,13 +104,13 @@ def stock_simulation():
                     raise ValueError
             except ValueError:
                 if amount <= 0:
-                    print('Enter a positive amount, short selling not allowed')
+                    print('ERROR! Enter a positive amount, short selling not allowed')
                     continue
                 elif capital < amount:
-                    print('You have not enough cash')
+                    print('ERROR! You have not enough cash')
                     continue
                 else:
-                    print('Enter a valid number')
+                    print('ERROR! Enter a valid number')
                 
             else:
                 list_stocks.append(stock)
@@ -92,7 +124,7 @@ def stock_simulation():
         
 
     # notional_stocks = [5000,5000]
-    # list_stocks = ['Gold','Eatcoin']
+    # list_stocks = ['Gold','Eatcoin'] # premade_list to practice 
     
 
     #######################################################################
@@ -143,3 +175,5 @@ def stock_simulation():
 
 if __name__ == '__main__':
     stock_simulation()
+
+# %%
