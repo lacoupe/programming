@@ -173,13 +173,16 @@ def gen_ue_agenda(N=65):
 
 ####################TESTS######################
 
-#Wage growth sample
-print(wage_growth_sample())
+if __name__ == "__main__":
 
-#Unemployment
-nb_test = nb_ue_p()
-len_test = len_ue_p(nb_test)
-agenda_test = agenda_ue_p(nb_test, len_test, N=65)
-print(agenda_test)
+    #Wage growth sample
+    print(wage_growth_sample())
+    
+    #Unemployment
+    nb_test = nb_ue_p()
+    len_test = len_ue_p(nb_test)
+    agenda_test = agenda_ue_p(nb_test, len_test, N=65)
+    print(agenda_test)
+    
+    print(gen_ue_agenda())
 
-print(gen_ue_agenda())
