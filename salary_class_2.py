@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 """
 Created on Wed Apr 21 21:00:26 2021
@@ -10,16 +11,16 @@ from salary_evolution_rates import wage_growth_sample, gen_ue_agenda
  
 class Salary:
     
-    def __init__(self,initial_wage):
+    def __init__(self,initial_wage, len_life):
         self.first_wage = initial_wage #First year (t=0 to t=1) wage
         self.wage_t = 0 #Actual wage (t) (intitialized at 0 at t=0)
-        self.growth_sample = wage_growth_sample(N=65) #Simulation of wage growth
-        self.ue_agenda_dict, self.ue_agenda_list  = gen_ue_agenda(N=65) #Simulation of unemployment periods
+        self.growth_sample = wage_growth_sample(N = len_life) #Simulation of wage growth
+        self.ue_agenda_dict, self.ue_agenda_list  = gen_ue_agenda(N=len_life) #Simulation of unemployment periods
         self.wage_evolution = {0:{'Salary':0, 'Growth':'Start'},
                                1:{'Salary':initial_wage, 'Growth':'First Salary'}} #Dict keeping all wages (initialized with w_0, w_1)
         self.t = 0 #time pointer initialized at 0
         
-        self.wage_agenda = self.compute_wage_agenda(N=65)
+        self.wage_agenda = self.compute_wage_agenda(N=len_life)
     
     
     def yearly_adjustments(self, t, w_rates):
@@ -92,6 +93,9 @@ class Salary:
 
 ##############################TEST#################################
 
+if __name__ == "__main__":
 
-w1 =Salary(6000)
-w1.compute_salary_report()
+    w1 =Salary(6000, 40)
+    w1.wage_agenda
+    w1.compute_salary_report()
+
