@@ -90,6 +90,24 @@ class Salary:
                     s = 'Unlucky ! Get decreased by {}% wrt to last salary'.format(g)
 
             print("{:<10}{:<20}{:<50}".format(i, w, s))
+    
+    def salary_single_report(self, t):
+        
+        sal_t = self.wage_agenda[t]['Salary'] #Salary we get at time t
+        growth_t = self.wage_agenda[t]['Growth'] #Salary growth get at time t
+        
+        if growth_t == 'UE':
+            info = 'Unlucky: Unemployment period ...'
+        else:
+            info = "At time %d you receive a salary of CHF %d, \n (growth rate : %s) "%(t, sal_t, growth_t)
+        
+        print('\n')
+        print('------------------------------------------------------')
+        print('---------------------SALARY INFOS---------------------')
+        print('------------------------------------------------------')
+        print('\n', info, '\n')
+        print('------------------------------------------------------')
+
 
 ##############################TEST#################################
 
@@ -98,4 +116,4 @@ if __name__ == "__main__":
     w1 =Salary(6000, 40)
     w1.wage_agenda
     w1.compute_salary_report()
-
+    w1.salary_single_report(8)
