@@ -18,7 +18,13 @@ class Account:
         
         self.net_movements_t = 0 #making the sum of + & - transfers where account is concerned
         
-    
+        self.hist = {} #Dictionary which will keep history of the account
+        
+        if self.name == 'Saving':
+            self.hist[0] = {'last_balance':0, 'int_rate':0, 'int_payment':0, 'net_mov':0, 'balance': initial_amount }
+        elif self.name == 'Current':
+            self.hist[0] = {'last_balance':0, 'int_rate':0, 'int_payment':0, 'net_mov':0, 'balance': 0 }
+
     def yearly_adjustments(self, t, rates):
         
         if t==0:
@@ -38,6 +44,14 @@ class Account:
             #Report
             self.single_report(t, net_mov, int_rate, int_payment, fut_int_rate)
             
+            #store data    
+            self.hist[t] = {'last_balance':self.last_balance_t,
+                            'int_rate': int_rate,
+                            'int_payment': int_payment,
+                            'net_mov': net_mov, 
+                            'balance': self.balance_t }
+
+            
             
         elif self.name == 'Current':
                         
@@ -48,9 +62,15 @@ class Account:
             
             #Report
             self.single_report(t, net_mov)
-
             
-        
+            #store data    
+            self.hist[t] = {'last_balance':self.last_balance_t,
+                            'int_rate': 0,
+                            'int_payment': 0,
+                            'net_mov': net_mov, 
+                            'balance': self.balance_t }
+
+
         #Reset movements balance to zero for the new coming year
         self.net_movements_t = 0 
         
@@ -72,7 +92,15 @@ class Account:
         
 
     def single_report(self, t, net_mov,int_rate = 0, int_payment = 0, fut_int_rate = 0):
-
+        """
+        When called, this function generates a report about all informations about the accounts e.g. :
+            - Last year balance
+            - Interests (Only for saving account)
+            - Net Movements (Deposit-Withdrawals)
+            - Current Balance
+        """
+        
+        
         if self.name == 'Saving':
             print('')
             print('SAVING ACCOUNT:')
@@ -135,4 +163,3 @@ if __name__ == "__main__":
     
     a1.yearly_adjustments(2, test_rates)
     a2.yearly_adjustments(2, test_rates)
-
