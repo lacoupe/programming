@@ -50,7 +50,30 @@ class user:
         
         return wages
         
+    def set_sav_dec(self):
+        
+        frac_saving = 0.5
+        frac_consuming = 0.5
+        
+        return frac_saving, frac_consuming
     
+    def report_single_sav_dec(self, sal_t, frac_sav, frac_cons):
+        
+        frac_sal_sav = frac_sav * sal_t #Part of the salary we want to save
+        frac_sal_cons = frac_cons * sal_t #Part of the salary we use for consumption
+        
+        string_frac_sav = str(frac_sav * 100) + '%'
+        
+        info = 'You decided to save %s of your salary: CHF %d'%(string_frac_sav, frac_sal_sav)
+        
+        print('\n')
+        print('------------------------------------------------------')
+        print('----------------SAVING DECISIONS INFOS----------------')
+        print('------------------------------------------------------')
+        print('\n', info, '\n')
+        print('------------------------------------------------------') 
+        
+
     
     def run_single_cycle(self):
         
@@ -66,42 +89,24 @@ class user:
         frac_sal_sav = frac_saving * sal_t #Part of the salary we want to save
         frac_sal_cons = frac_consuming * sal_t #Part of the salary we use for consumption
         
+        #Print Salary Report      
+        self.wages.salary_single_report(self.t)
         
-        print(2*'\n')
-        print('--------------------SALARY INFOS--------------------')
-        print("At time %d receive a salary of CHF %d, (growth rate : %s) "%(self.t, sal_t, growth_t))
+        #Print Saving Decision Report
+        self.report_single_sav_dec(sal_t, frac_saving, frac_consuming)
+        
+        #Print Bank Report & update accounts
         print('\n')
-        print('You decided to save CHF %d of your salary on saving account'%(frac_sal_sav))
         print('------------------------------------------------------')
-        print('\n')
-
-    
-        #Summary of t-1 situation
         print('--------------------ACCOUNTS INFOS--------------------')
-        print('')
         print('------------------------------------------------------')
-        print("At time %d your accounts were as follow: "%(self.t -1))
-        self.s_account.info()
-        self.c_account.info()
-        print('Interest rates for this year was:', self.int_rates[self.t-1])
-        print('')
-        print('------------------------------------------------------')
-        print('')
-        #New t situation
-        #self.t += 1     
-        print("At time %d your accounts are as follow: "%(self.t))
+      
         self.c_account.deposit(sal_t) #Salary deposit
         self.c_account.withdraw(frac_sal_cons) #Consumption
         self.c_account.transfer(self.s_account, frac_sal_sav) #Savings transfer
         self.c_account.yearly_adjustments(self.t, self.int_rates)
         self.s_account.yearly_adjustments(self.t, self.int_rates)
-        print('')
-        
-        print('------------------------------------------------------')
-        print('Interest rates for this coming year is:', self.int_rates[self.t])
-        print('------------------------------------------------------')
-        
-        
+
 
         
             
