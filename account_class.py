@@ -25,7 +25,7 @@ class Account:
         elif self.name == 'Current':
             self.hist[0] = {'last_balance':0, 'int_rate':0, 'int_payment':0, 'net_mov':0, 'balance': 0 }
 
-    def yearly_adjustments(self, t, rates):
+    def yearly_adjustments(self, t, rates, disp = True):
         
         if t==0:
             return
@@ -42,7 +42,7 @@ class Account:
             self.balance_t += (int_payment + net_mov)
             
             #Report
-            self.single_report(t, net_mov, int_rate, int_payment, fut_int_rate)
+            if disp: self.single_report(t, net_mov, int_rate, int_payment, fut_int_rate)
             
             #store data    
             self.hist[t] = {'last_balance':self.last_balance_t,
@@ -61,7 +61,7 @@ class Account:
             self.balance_t += net_mov
             
             #Report
-            self.single_report(t, net_mov)
+            if disp: self.single_report(t, net_mov)
             
             #store data    
             self.hist[t] = {'last_balance':self.last_balance_t,
@@ -163,3 +163,4 @@ if __name__ == "__main__":
     
     a1.yearly_adjustments(2, test_rates)
     a2.yearly_adjustments(2, test_rates)
+
