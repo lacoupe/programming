@@ -104,12 +104,12 @@ class user:
         self.c_account.deposit(sal_t) #Salary deposit
         self.c_account.withdraw(frac_sal_cons) #Consumption
         self.c_account.transfer(self.s_account, frac_sal_sav) #Savings transfer
-        self.c_account.yearly_adjustments(self.t, self.int_rates)
-        self.s_account.yearly_adjustments(self.t, self.int_rates)
+        self.c_account.yearly_adjustments(self.t, self.int_rates, disp=True)
+        self.s_account.yearly_adjustments(self.t, self.int_rates, disp=True)
 
 
-        
-            
+
+
 ####################TESTS######################
 
 if __name__ == "__main__":
