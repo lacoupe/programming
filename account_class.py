@@ -25,32 +25,29 @@ class Account:
             return
         
         if self.name == 'Saving':
-            
-            print('SAVING ACCOUNT:')
-            
+                        
             int_rate = rates[t-1]
+            fut_int_rate = rates[t]
             int_payment = self.last_balance_t*int_rate  #Yearly interest rates payment based on last year balance
-            print('Interests received/paid on last year (t = {} to t = {}) : CHF {}'.format(t-1, t, int_payment))
     
             net_mov = self.net_movements_t #Net yearly withdrawals, deposits, transfers need to adjust
-            print('Net movements on last year (t = {} to t = {}) : CHF {}'.format(t-1, t, net_mov))
             
             #adjust balance for interests and movements:
             self.balance_t += (int_payment + net_mov)
             
-            print('Last year (t = {}) balance was : CHF {} \nThis year ( t= {}) balance is : CHF {}'.format(t-1, self.last_balance_t, t, self.balance_t))
-        
+            #Report
+            self.single_report(t, net_mov, int_rate, int_payment, fut_int_rate)
+            
+            
         elif self.name == 'Current':
-            
-            print('CURRENT ACCOUNT:')
-            
+                        
             net_mov = self.net_movements_t #Net yearly withdrawals, deposits, transfers need to adjust
-            print('Net movements on last year (t = {} to t = {}) : CHF {}'.format(t-1, t, net_mov))
             
             #adjust balance for interests and movements:
             self.balance_t += net_mov
             
-            print('Last year (t = {}) balance was : CHF {} \nThis year ( t= {}) balance is : CHF {}'.format(t-1, self.last_balance_t, t, self.balance_t))
+            #Report
+            self.single_report(t, net_mov)
 
             
         
@@ -71,6 +68,37 @@ class Account:
     def info(self):
         s = "Account name : %s \nBalance : %s" % (self.name, self.balance_t)
         print(s)
+        
+        
+
+    def single_report(self, t, net_mov,int_rate = 0, int_payment = 0, fut_int_rate = 0):
+
+        if self.name == 'Saving':
+            print('')
+            print('SAVING ACCOUNT:')
+            print('------------------------------------------------------')
+            print('Last year (t = {}) balance was : CHF {}'.format(t-1, round(self.last_balance_t)))
+            print('Interest rate was : {}%'.format(round(int_rate*100, 4)))
+            print('Interests received/paid on last year : CHF {}'.format(round(int_payment)))
+            print('Net movements on last year : CHF {}'.format(net_mov))
+            print('This year (t= {}) balance is : CHF {}'.format(t, round(self.balance_t)))
+            print('')
+            print('------------------------------------------------------')
+            print('Interest rates for this coming year is: {}%'.format(round(fut_int_rate*100, 4)))
+            print('------------------------------------------------------')
+
+        
+        elif self.name == 'Current':
+            print('')
+            print('CURRENT ACCOUNT:')
+            print('------------------------------------------------------')
+            print('Last year (t = {}) balance was : CHF {}'.format(t-1, round(self.last_balance_t)))
+            print('Net movements on last year : CHF {}'.format(net_mov))
+            print('This year (t= {}) balance is : CHF {}'.format(t, self.balance_t))
+
+        
+        
+        
     
     def transfer(self, other, amount):
         self.withdraw(amount)
@@ -86,7 +114,7 @@ if __name__ == "__main__":
     print(test_rates[0:2])    
     
     a1 = Account('Current', 20000)
-    a2 = Account('Spare', 20000)
+    a2 = Account('Saving', 20000)
     
     a1.info()
     a2.info()
