@@ -73,9 +73,26 @@ class user:
         print('\n', info, '\n')
         print('------------------------------------------------------') 
         
+    def report_multiple_sav_dec(self, n, frac_sav, frac_cons):
+        
+        string_frac_sav = str(frac_sav * 100) + '%'
+        
+        info = 'For the next %d periods, you decided to save %s of your salary'%(n, string_frac_sav)
+        
+        print('\n')
+        print('------------------------------------------------------')
+        print('----------------SAVING DECISIONS INFOS----------------')
+        print('------------------------------------------------------')
+        print('\n', info, '\n')
+        print('------------------------------------------------------') 
 
     
     def run_single_cycle(self):
+        """
+        This function is here to run a single cycle (User want to simulate one year only)
+        Calls all needed classes methods to update salary, accounts, ...
+        Create some single periods reports
+        """
         
         frac_saving = 0.5
         frac_consuming = 0.5
@@ -104,10 +121,47 @@ class user:
         self.c_account.deposit(sal_t) #Salary deposit
         self.c_account.withdraw(frac_sal_cons) #Consumption
         self.c_account.transfer(self.s_account, frac_sal_sav) #Savings transfer
-        self.c_account.yearly_adjustments(self.t, self.int_rates, disp=True)
-        self.s_account.yearly_adjustments(self.t, self.int_rates, disp=True)
+        self.c_account.yearly_adjustments(self.t, self.int_rates, disp=True) #Current Account Updates and report
+        self.s_account.yearly_adjustments(self.t, self.int_rates, disp=True) #Saving Account Updates and report
 
+    def run_cycle(self, n, frac_sav, frac_cons):
+        """
+        This function is here to run multiple cycle (User want to simulate multiple years)
+        Calls all needed classes methods to update salary, accounts, ...
+        Create some multiple periods reports
+        """
+        
+        beg = self.t + 1 #First period to update
+        end = beg + n - 1 #Last period to update
+        
+        #Print Salary Report      
+        self.wages.compute_salary_report(beg, end)
+        
+        #Print Saving Decision Report
+        self.report_multiple_sav_dec(n, frac_sav, frac_cons)
+        
+        for p in range(n): #Make n period updates 
+        
+            self.t += 1 # Update time pointer
+    
+            sal_t = self.wages.wage_agenda[self.t]['Salary'] #Salary we get at time t
+            growth_t = self.wages.wage_agenda[self.t]['Growth'] #Salary growth get at time t
+            
+            frac_sal_sav = frac_sav * sal_t #Part of the salary we want to save
+            frac_sal_cons = frac_cons * sal_t #Part of the salary we use for consumption
+        
+            self.c_account.deposit(sal_t) #Salary deposit
+            self.c_account.withdraw(frac_sal_cons) #Consumption
+            self.c_account.transfer(self.s_account, frac_sal_sav) #Savings transfer
+            self.c_account.yearly_adjustments(self.t, self.int_rates, disp=False) #Current Account Updates and report
+            self.s_account.yearly_adjustments(self.t, self.int_rates, disp=False) #Saving Account Updates and report
+ 
+        #Print Accounts Reports
+        self.c_account.compute_account_report(beg, end)
+        self.s_account.compute_account_report(beg, end)
 
+        
+        
 
 
 ####################TESTS######################
@@ -117,4 +171,4 @@ if __name__ == "__main__":
     
     antoine = user(25, 90000, 20000)
     antoine.run_single_cycle()        
-    antoine.wages.wage_agenda[1]
+    antoine.run_cycle(20, 0.5, 0.4)
