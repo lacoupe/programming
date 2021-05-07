@@ -8,8 +8,12 @@ Created on Tue May  4 15:14:45 2021
 from account_class import Account
 from interest_rates import rate_evolution_sample
 from salary_class_2 import Salary
+from investment_class import Investment
 
 class user:
+
+    ###############INITIALISATION FUNCTIONS###############
+
     
     def __init__(self, t_0, first_sal, first_cap):
         self.age = t_0 #The age at which user start working
@@ -25,7 +29,22 @@ class user:
         self.c_account, self.s_account, self.int_rates = self.init_bank()
         ##Salary stuffs:
         self.wages = self.init_job()
+        ##Stocks stuffs
+        self.e_inv, self.t_inv, self.n_inv, self.g_inv  = self.init_stocks()
+     
+    def init_stocks(self):
+        """
+        function initializing the stocks available to user and their processes
+        """
         
+        n = self.len_life
+        
+        e_inv =  Investment('Eatcoin', n)
+        t_inv = Investment('Teslo', n)
+        n_inv = Investment('Nestlo', n)
+        g_inv = Investment('Gold', n)
+        
+        return e_inv, t_inv, n_inv, g_inv
         
     def init_bank(self):
         """
@@ -49,42 +68,9 @@ class user:
         wages = Salary(self.first_sal, self.len_life)
         
         return wages
-        
-    def set_sav_dec(self):
-        
-        frac_saving = 0.5
-        frac_consuming = 0.5
-        
-        return frac_saving, frac_consuming
-    
-    def report_single_sav_dec(self, sal_t, frac_sav, frac_cons):
-        
-        frac_sal_sav = frac_sav * sal_t #Part of the salary we want to save
-        frac_sal_cons = frac_cons * sal_t #Part of the salary we use for consumption
-        
-        string_frac_sav = str(frac_sav * 100) + '%'
-        
-        info = 'You decided to save %s of your salary: CHF %d'%(string_frac_sav, frac_sal_sav)
-        
-        print('\n')
-        print('------------------------------------------------------')
-        print('----------------SAVING DECISIONS INFOS----------------')
-        print('------------------------------------------------------')
-        print('\n', info, '\n')
-        print('------------------------------------------------------') 
-        
-    def report_multiple_sav_dec(self, n, frac_sav, frac_cons):
-        
-        string_frac_sav = str(frac_sav * 100) + '%'
-        
-        info = 'For the next %d periods, you decided to save %s of your salary'%(n, string_frac_sav)
-        
-        print('\n')
-        print('------------------------------------------------------')
-        print('----------------SAVING DECISIONS INFOS----------------')
-        print('------------------------------------------------------')
-        print('\n', info, '\n')
-        print('------------------------------------------------------') 
+
+
+    ###################CYCLES FUNCTIONS###################
 
     
     def run_single_cycle(self):
@@ -161,7 +147,60 @@ class user:
         self.s_account.compute_account_report(beg, end)
 
         
+    ###################PRINT FUNCTIONS###################
+
+
+    def report_single_sav_dec(self, sal_t, frac_sav, frac_cons):
         
+        frac_sal_sav = frac_sav * sal_t #Part of the salary we want to save
+        frac_sal_cons = frac_cons * sal_t #Part of the salary we use for consumption
+        
+        string_frac_sav = str(frac_sav * 100) + '%'
+        
+        info = 'You decided to save %s of your salary: CHF %d'%(string_frac_sav, frac_sal_sav)
+        
+        print('\n')
+        print('------------------------------------------------------')
+        print('----------------SAVING DECISIONS INFOS----------------')
+        print('------------------------------------------------------')
+        print('\n', info, '\n')
+        print('------------------------------------------------------') 
+        
+    def report_multiple_sav_dec(self, n, frac_sav, frac_cons):
+        
+        string_frac_sav = str(frac_sav * 100) + '%'
+        
+        info = 'For the next %d periods, you decided to save %s of your salary'%(n, string_frac_sav)
+        
+        print('\n')
+        print('------------------------------------------------------')
+        print('----------------SAVING DECISIONS INFOS----------------')
+        print('------------------------------------------------------')
+        print('\n', info, '\n')
+        print('------------------------------------------------------') 
+        
+
+
+    ###################INTERACTION FUNCTIONS###################
+
+    def set_sav_dec(self):
+        
+        saving_q = 'What will be the fraction of your salary you want to save every year ? \n(format : type 0.5 if you want to save 50% of your salary)'
+        frac_sav = input(saving_q)
+        
+        consuming_q = 'What will be the fraction of your salary you want to consume every year ? \n(format : type 0.5 if you want to consume 50% of your salary)'
+        frac_cons = input(consuming_q)
+        
+        #frac_saving = 0.5
+        #frac_consuming = 0.5
+        
+        return frac_sav, frac_cons
+    
+    
+    def invest_stock(self, name):
+        print()
+
+
 
 
 ####################TESTS######################
@@ -169,6 +208,7 @@ class user:
 if __name__ == "__main__":
    
     
-    antoine = user(25, 90000, 20000)
-    antoine.run_single_cycle()        
-    antoine.run_cycle(20, 0.5, 0.4)
+    antoine = user(25, 90000, 20000) 
+    antoine.set_sav_dec()
+    antoine.run_single_cycle() 
+    antoine.run_cycle(20, 0.5, 0.4) 
