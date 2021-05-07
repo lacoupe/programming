@@ -126,7 +126,38 @@ class Account:
 
         
         
+    def compute_account_report(self, beg, end):
         
+        timeline = range(beg, end + 1)
+        if self.name =='Saving':
+            title = 'SAVING ACCCOUNT REPORT'
+        elif self.name == 'Current':
+            title = 'CURRENT ACCOUNT REPORT'
+        
+        
+        
+        print(80*'-')
+        print(80*'-')
+        print("{:<30}{:<20}{:<30}".format(' ',title,' '))
+        print(80*'-')
+        print(80*'-')
+        print("{:<5}{:<15}{:<15}{:<15}{:<15}{:<15}".format('Year','Last Balance','Int. Rate', 'Int. Payment', 'Net Movements', 'Current Balance'))
+        print(80*'-')
+        
+        
+        for t in timeline :
+            
+            l_bal = round(self.hist[t]['last_balance'],2)
+            i_rate = str(round(self.hist[t]['int_rate']*100, 3)) + ' %'
+            i_pay = round(self.hist[t]['int_payment'], 2)
+            net_mov = round(self.hist[t]['net_mov'], 2)
+            c_bal = round(self.hist[t]['balance'], 2)
+            
+            print("{:<5}{:<15}{:<15}{:<15}{:<15}{:<15}".format(t, l_bal, i_rate, i_pay, net_mov, c_bal))
+        
+        print(80*'-')
+        print(80*'-')
+
     
     def transfer(self, other, amount):
         self.withdraw(amount)
@@ -164,3 +195,5 @@ if __name__ == "__main__":
     a1.yearly_adjustments(2, test_rates)
     a2.yearly_adjustments(2, test_rates)
 
+    a2.hist
+    a2.compute_account_report(0,1)
