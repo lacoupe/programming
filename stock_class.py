@@ -62,6 +62,9 @@ class Stock:
                 last_y_price = self.y_price[y - 1]
                 current_y_price = self.y_price[y]
                 self.y_return.append((current_y_price / last_y_price) - 1)
+    
+    def get_y_returns(self):
+        return self.y_return
 
     def info(self):
         print('Information of the stock :')
