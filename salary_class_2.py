@@ -62,7 +62,9 @@ class Salary:
         return self.wage_evolution
             
             
-    def compute_salary_report(self, beg = 0, end = 65):
+    def compute_salary_report(self, beg, end):
+        
+        timeline = range(beg, end + 1)
         
         print(80*'-')
         print(80*'-')
@@ -71,7 +73,7 @@ class Salary:
         print(80*'-')
         print("{:<10}{:<20}{:<50}".format('Year','Salary','Evolution'))
         print(80*'-')
-        for i in list(self.wage_agenda.keys()) :
+        for i in timeline :
             w = '%.2f'%self.wage_agenda[i]['Salary']
             
             if isinstance(self.wage_agenda[i]['Growth'], str):
@@ -90,6 +92,10 @@ class Salary:
                     s = 'Unlucky ! Get decreased by {}% wrt to last salary'.format(g)
 
             print("{:<10}{:<20}{:<50}".format(i, w, s))
+        
+        print(80*'-')
+        print(80*'-')
+
     
     def salary_single_report(self, t):
         
@@ -115,5 +121,5 @@ if __name__ == "__main__":
 
     w1 =Salary(6000, 40)
     w1.wage_agenda
-    w1.compute_salary_report()
+    w1.compute_salary_report(0, 20)
     w1.salary_single_report(8)
