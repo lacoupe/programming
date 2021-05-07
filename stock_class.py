@@ -1,18 +1,19 @@
 import numpy as np
 
 
-def create_price(mu = 0.2, sigma = 0.2, years = 1, lam = 1, m = -0.1, v = 0.1):
+def create_price(mu=0.2, sigma=0.2, years=1, lam=1, m=-0.1, v=0.1):
     """
     This function simulates the evolution of a stock price
     """
     days = 365
-    N = years*days
-    dt = 1/days
-    zt_stock = np.random.normal(0, np.sqrt(dt), size = N)  # randomness of the stock price
-    zt_jump = np.random.normal(m, v, size = N)  # randomness of the intensity and direction of the jump
-    nt = np.random.poisson(lam * dt, size = N)  # randomness of jump occurence 
+    N = years * days
+    dt = 1 / days
+    zt_stock = np.random.normal(0, np.sqrt(dt), size=N)  # randomness of the stock price
+    zt_jump = np.random.normal(m, v, size=N)  # randomness of the intensity and direction of the jump
+    nt = np.random.poisson(lam * dt, size=N)  # randomness of jump occurence
 
-    return np.exp(np.cumsum((mu-sigma**2/2) * dt + sigma * zt_stock) + np.multiply(nt,zt_jump).cumsum(axis = 0) )
+    return np.exp(np.cumsum((mu - sigma**2 / 2) * dt + sigma * zt_stock) + np.multiply(nt, zt_jump).cumsum(axis=0))
+
 
 class Stock:
 
@@ -47,8 +48,7 @@ class Stock:
             self.m = 0
             self.v = 0.05
         
-        self.price = create_price(mu = self.mu, sigma = self.sigma, years = self.years, lam = self.lam, m = self.m, v = self.v)
-
+        self.price = create_price(mu=self.mu, sigma=self.sigma, years=self.years, lam=self.lam, m=self.m, v=self.v)
 
     def info(self):
         print('Information of the stock :')
