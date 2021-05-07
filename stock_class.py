@@ -50,6 +50,19 @@ class Stock:
         
         self.price = create_price(mu=self.mu, sigma=self.sigma, years=self.years, lam=self.lam, m=self.m, v=self.v)
 
+        self.d_price = create_price(mu=self.mu, sigma=self.sigma, years=self.years, lam=self.lam, m=self.m, v=self.v)
+        self.y_price = []
+        self.y_return = [0]
+
+        for y in range(self.years):
+            self.y_price.append(self.d_price[y * 365])
+            if y == 0:
+                continue
+            else:
+                last_y_price = self.y_price[y - 1]
+                current_y_price = self.y_price[y]
+                self.y_return.append((current_y_price / last_y_price) - 1)
+
     def info(self):
         print('Information of the stock :')
         print(f'name : {self.name}')

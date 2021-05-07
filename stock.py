@@ -1,5 +1,3 @@
-
-
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -42,7 +40,7 @@ def stock_simulation():
     
     temp_list = list(d_price.keys())
 
-    print('\n' + '*' * 60 + '\n' + 'BIENVENIDO AL JUEGO DE LA BOLSA! Try not to loose money :) ')
+    print('\n' + '*' * 60 + '\n' + 'JEUX BOURSIER ')
     print('The stocks available in this simulation are :', end=' ')
     for stock_name in temp_list:
         if stock_name == temp_list[-1]:
