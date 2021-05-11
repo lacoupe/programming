@@ -37,7 +37,7 @@ class Investment:
         eatcoin_param = ['Eatcoin', 'very_high', 'best cryptocurrency', n]
         teslo_param = ['Teslo', 'high', 'electric car company', n]
         nestlo_param = ['Nestlo', 'medium', 'milk company', n]
-        gold_param = ['Gold', 'low' 'something that is precious', n]
+        gold_param = ['Gold', 'low', 'something that is precious', n]
         
         #Dictionary linking asset names and parameteres
         assets = {'Eatcoin': eatcoin_param, 'Teslo': teslo_param, 'Nestlo': nestlo_param, 'Gold': gold_param }
@@ -56,12 +56,38 @@ class Investment:
                 else:
                     continue
                 
-    def deposit(self, amount):
+    def deposit(self, t, amount, disp = True):
+        
+        bal = self.balance_t + self.net_movements_t
+        
         self.net_movements_t += amount
-            
-    def withdraw(self, amount):
+        
+        if disp:
+            print('')
+            print('Transaction Report')
+            print('------------------------------------------------------')
+            print('Asset concerned : %s'%(self.name))
+            print('Balance before adjustment at t = %d : CHF %d'%(t, bal))
+            print('Investment amount = %d : CHF %d'%(t, amount))
+            print('Adjusted balance at t = %d : CHF %d'%(t, bal + amount))
+
+        
+        
+    def withdraw(self, t, amount, disp = True):
+        
+        bal = self.balance_t + self.net_movements_t
+        
         self.net_movements_t -= amount
-                    
+        
+        if disp:
+           print('')
+           print('Transaction Report')
+           print('------------------------------------------------------')
+           print('Asset concerned : %s'%(self.name))
+           print('Balance before adjustment at t = %d : CHF %d'%(t, bal))
+           print('Sale amount = %d : CHF %d'%(t, amount))
+           print('Adjusted balance at t = %d : CHF %d'%(t, bal - amount))
+                   
         
     def return_adjustment(self, t):
         if t==0:
@@ -77,6 +103,8 @@ class Investment:
         self.hist[t]['return'] = ret
         self.hist[t]['pnl'] = pnl
         self.hist[t]['balance'] = self.balance_t
+        self.hist[t]['net_mov'] = 0
+        self.hist[t]['adj_balance'] = self.balance_t
 
 
     def situation_report(self, t):
@@ -154,7 +182,7 @@ class Investment:
     def single_year_adj_2(self,t, disp = True):
         if t==0: return
         #Display informations about transactions
-        if disp: self.transac_report(t)
+        #if disp: self.transac_report(t)
         
         #Adjust for transactions
         net_mov = self.net_movements_t #Net yearly withdrawals, deposits, need to adjust
@@ -167,25 +195,37 @@ class Investment:
         #Reset variables
         self.net_movements_t = 0
         self.last_balance_t = self.balance_t
+    
+    def multi_year_adj(self, beg, n, disp = True):
+        
+        timeline = range(beg, beg+n)
+        
+        for t in timeline:
+            if t==0: continue    
+                        
+            self.single_year_adj_1(t, False)
+            if not t == beg + n - 1:
+                self.single_year_adj_2(t, False)
+        
+        if disp: self.compute_investment_report(beg, beg + n -1)
 
         
 ################TEST######################
 
 if __name__ == "__main__":
-  
-                
-    test_inv = Investment('Eatcoin')
+                  
+    test_inv = Investment('Teslo')
     test_inv.returns[:5]
     
     test_inv.single_year_adj_1(1)
-    test_inv.deposit(200)
+    test_inv.deposit(1, 200)
     test_inv.single_year_adj_2(1)
     
     test_inv.single_year_adj_1(2)
     test_inv.single_year_adj_2(2)
     
     test_inv.single_year_adj_1(3)
-    test_inv.withdraw(50)
+    test_inv.withdraw(3, 50)
     test_inv.single_year_adj_2(3)
     
     test_inv.single_year_adj_1(4)
@@ -209,4 +249,9 @@ if __name__ == "__main__":
     test_inv.single_year_adj_1(10)
     test_inv.single_year_adj_2(10)
     
+    test_inv.hist
+    
     test_inv.compute_investment_report(1, 10)
+    
+    test_inv.multi_year_adj(11,10, disp = True)
+    
