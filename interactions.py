@@ -147,6 +147,7 @@ def get_info_salary():
     print('1st Salary Simulation done: \nin one year, at t = 1, you will be paid CHF ', agent_salary)
     print('---------------------------------------------------------------------------')
 
+    return age, agent_salary
 
 def get_info_capital():
     
@@ -180,3 +181,45 @@ def get_info_capital():
     print('Thanks again for the informations ! ')
     print('You start the game with an initial amount on your saving account of : CHF %d'%(capital_0))
 
+    return capital_0
+
+def first_simulation():
+    print('')
+    print('First Year Simulation (t = 0 -> t = 1')
+    print('---------------------------------------------------------------------------')
+    
+    while True :
+        try:
+            frac_s = float(input('First things first, chose the fraction of salary you want to save \n(e.g. If you want to save 20% type 0.2) '))
+            frac_c = float(input('Second, chose the fraction of salary you want to consume \n(e.g. If you want to save 20% type 0.2) '))
+            if frac_s > 1 or frac_c > 1 or frac_s < 0 or frac_c < 0:
+                raise ValueError
+            if frac_s + frac_c > 1:
+                raise ValueError
+        except ValueError:
+                print("Please, valid fraction between 0 and 1 (e.g. 0.1, 0.25, ...) \nYou can't consume and save more than what you warn (sum <= 1)")
+                continue
+        else :
+            break
+        
+    while True : 
+        try:
+            go = input('Alright, are you ready to start playing with your life ? If yes type ok ')
+            if not go == 'ok':
+                raise ValueError("Please, enter a fraction between 0 and 1 (e.g. 0.1, 0.25, ...")
+        except ValueError:
+                print("To continue the game type ok")
+                continue
+        else :
+            break 
+    
+    return frac_s, frac_c
+    
+####################TESTS######################
+
+if __name__ == "__main__":
+    
+    #get_info_capital()        
+    
+    first_simulation()    
+        
