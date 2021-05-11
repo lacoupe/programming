@@ -73,7 +73,7 @@ class user:
     ###################CYCLES FUNCTIONS###################
 
     
-    def run_single_cycle(self):
+    def run_single_cycle(self, frac_saving = 0.5, frac_consuming = 0.5):
         """
         This function is here to run a single cycle (User want to simulate one year only)
         Calls all needed classes methods to update salary, accounts, ...
@@ -323,6 +323,4 @@ if __name__ == "__main__":
     antoine.set_sav_dec()
     antoine.run_single_cycle() 
     antoine.run_cycle(10, 0.5, 0.4) 
-    antoine.run_cycle(10, 0.5, 0.5)
     #antoine.run_single_cycle() 
-
