@@ -77,7 +77,31 @@ class Account:
         #Store new current balance as last balance for next period computations
         self.last_balance_t = self.balance_t
         
-     
+        
+    def instant_adjustment(self, t, amount, disp = True):
+        
+        bal = self.balance_t
+        
+        if bal + amount <0:
+            print('IMPOSSIBLE: Available capital on account is: CHF %d'%(bal))
+            return
+        
+        net_mov = self.hist[t]['net_mov']
+        net_mov += amount
+        self.hist[t]['net_mov'] = net_mov
+        
+        self.balance_t += amount
+        self.hist[t]['balance'] = bal + amount
+        self.last_balance_t += amount
+        
+        if disp:
+            print('')
+            print('Transaction Report')
+            print('------------------------------------------------------')
+            print('Account concerned : %s'%(self.name))
+            print('Balance before adjustment at t = %d : CHF %d'%(t, bal))
+            print('Net movements at t = %d : CHF %d'%(t, amount))
+            print('Adjusted balance at t = %d : CHF %d'%(t, bal + amount)) 
         
     def deposit(self, amount):
         self.net_movements_t += amount
@@ -196,4 +220,11 @@ if __name__ == "__main__":
     a2.yearly_adjustments(2, test_rates)
 
     a2.hist
-    a2.compute_account_report(0,1)
+    a2.compute_account_report(0,2)
+    
+    a2.instant_adjustment(2, 3834.43,)
+
+    a2.compute_account_report(0,2)
+    
+    a2.yearly_adjustments(3, test_rates)
+
