@@ -15,8 +15,8 @@ class user:
     ###############INITIALISATION FUNCTIONS###############
 
     
-    def __init__(self, t_0, first_sal, first_cap):
-        self.age = t_0 #The age at which user start working
+    def __init__(self, age, first_sal, first_cap):
+        self.age = age #The age at which user start working
         self.len_life = 65 - self.age #Number of periods user will simulate up to retirement
         self.first_sal = first_sal #The first salary he'll get
         self.first_cap = first_cap #The capital he'll start his working life with
@@ -39,10 +39,10 @@ class user:
         
         n = self.len_life
         
-        e_inv =  Investment('Eatcoin', n)
-        t_inv = Investment('Teslo', n)
-        n_inv = Investment('Nestlo', n)
-        g_inv = Investment('Gold', n)
+        e_inv =  Investment('Eatcoin', n + 1)
+        t_inv = Investment('Teslo', n + 1)
+        n_inv = Investment('Nestlo', n + 1)
+        g_inv = Investment('Gold', n + 1)
         
         return e_inv, t_inv, n_inv, g_inv
         
@@ -56,7 +56,7 @@ class user:
         ##Second account will be saving account starting with initial capital:
         s_account = Account('Saving', self.first_cap)
         ##Next we need to generate the interest rates user will face all over his life
-        int_rates = rate_evolution_sample(N = self.len_life)
+        int_rates = rate_evolution_sample(N = self.len_life + 1)
         
         return c_account, s_account, int_rates
 
@@ -121,6 +121,8 @@ class user:
         #Update investments depending on new transactions
         for asset in [self.e_inv, self.t_inv, self.n_inv, self.g_inv]:
             asset.single_year_adj_2(self.t)
+            
+        return self.t
 
     def run_cycle(self, n, frac_sav, frac_cons):
         """
@@ -171,7 +173,9 @@ class user:
         for asset in [self.e_inv, self.t_inv, self.n_inv, self.g_inv]:
             asset.single_year_adj_2(self.t)
 
+        return self.t        
         
+
     ###################PRINT FUNCTIONS###################
 
 
@@ -324,3 +328,5 @@ if __name__ == "__main__":
     antoine.run_single_cycle() 
     antoine.run_cycle(10, 0.5, 0.4) 
     #antoine.run_single_cycle() 
+
+
