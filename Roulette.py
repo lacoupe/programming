@@ -8,8 +8,7 @@ Created on Tue Apr 27 19:59:26 2021
 import numpy as np
 import random
 
-n = random.randint(0,36)
-print(n)
+
 
 
 
