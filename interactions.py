@@ -85,10 +85,13 @@ def get_info_salary():
     while True : 
         try:
             age =int(input("How old are you ? Enter a positive number "))
-            if age<0:
-                raise ValueError("This is not a valid age. Age must be positive (or zero).")
+            if age<=0:
+                raise ValueError
+            if age>64:
+                raise ValueError
+
         except ValueError:
-            print("This is not a valid age. Age must be positive (or zero) and integer.")
+            print("This is not a valid age. Age must be integer betweem 1 and 64.")
             continue
         else :
             break
@@ -121,7 +124,6 @@ def get_info_salary():
     print('\nAmong the following sectors :\n')
     for s in sectors:
         print(' - ', s)
-    print('\nIn which sector do you work/will you work ? Enter exact name ')
     while True:
         try:
             sec  =input('In which sector do you work/will you work ? Enter exact name ')
@@ -135,19 +137,20 @@ def get_info_salary():
 
 
     agent_salary = simulate_salary(sec, exp, ed)
+    end_t = 65 - age
 
     print('')
     print('---------------------------------------------------------------------------')
     print('Thanks for the informations ! ')
     print('Today we are at time t = 0, you are %d years old'%(age))
-    print('You will reach retirement at time t = %d when you will be %d years old!'%(65 - age, 65))
+    print('You will reach retirement at time t = %d when you will be %d years old!'%(end_t, 65))
     print('---------------------------------------------------------------------------')
     print('')    
     print('---------------------------------------------------------------------------')
     print('1st Salary Simulation done: \nin one year, at t = 1, you will be paid CHF ', agent_salary)
     print('---------------------------------------------------------------------------')
 
-    return age, agent_salary
+    return age, agent_salary, end_t
 
 def get_info_capital():
     
@@ -185,7 +188,8 @@ def get_info_capital():
 
 def first_simulation():
     print('')
-    print('First Year Simulation (t = 0 -> t = 1')
+    print('---------------------------------------------------------------------------')
+    print('First Year Simulation (t = 0 -> t = 1)')
     print('---------------------------------------------------------------------------')
     
     while True :
@@ -214,6 +218,58 @@ def first_simulation():
             break 
     
     return frac_s, frac_c
+
+
+def simulation_len_q(t, end_t):
+    
+    max_l = end_t - t #Maximum number of periods you can simulate up to retirement
+    
+    print('')
+    print('---------------------------------------------------------------------------')
+    print('Next simulation preparation')
+    print('---------------------------------------------------------------------------')
+    print('')
+    print(' -Today you are at time %d'%(t))
+    print(' -Remember that you will reach retirement at time %d'%(end_t))
+    print(' -This therefore leaves %d years to simulate'%(max_l))
+    print('')
+    while True :
+        try:
+            l = int(input('Chose the number of years you want to simulate from now'))
+            if l < 1 or l > max_l:
+                raise ValueError
+        except ValueError:
+                print("Please, enter a valide number of years (integer between 1 and %d))"%(max_l))
+                continue
+        else :
+            break
+        
+    while True :
+        try:
+            frac_s = float(input('Chose the fraction of salary you want to save \n(e.g. If you want to save 20% type 0.2) '))
+            frac_c = float(input('Chose the fraction of salary you want to consume \n(e.g. If you want to save 20% type 0.2) '))
+            if frac_s > 1 or frac_c > 1 or frac_s < 0 or frac_c < 0:
+                raise ValueError
+            if frac_s + frac_c > 1:
+                raise ValueError
+        except ValueError:
+                print("Please, valid fraction between 0 and 1 (e.g. 0.1, 0.25, ...) \nYou can't consume and save more than what you warn (sum <= 1)")
+                continue
+        else :
+            break
+        
+    while True : 
+        try:
+            go = input('Alright, ready to step %d year(s) in future ? If yes type ok '%(l))
+            if not go == 'ok':
+                raise ValueError
+        except ValueError:
+                print("To continue the game type ok")
+                continue
+        else :
+            break 
+        
+    return l, frac_s, frac_c
     
 ####################TESTS######################
 
@@ -221,5 +277,7 @@ if __name__ == "__main__":
     
     #get_info_capital()        
     
-    first_simulation()    
+    first_simulation()   
+    simulation_len_q(1, 40)
+    
         
