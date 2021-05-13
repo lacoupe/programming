@@ -135,7 +135,8 @@ class Investment:
         
     def compute_investment_report(self, beg, end):
         
-        if self.hist[beg]['adj_balance']==0:
+        
+        if self.hist[beg]['adj_balance']==0 and not beg == 0 :
             return
         
         timeline = range(beg, end + 1)
