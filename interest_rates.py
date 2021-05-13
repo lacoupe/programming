@@ -58,7 +58,7 @@ def rate_evolution_sample(r0 = 0.001, k = 0.2, theta = 0.045, sigma = 0.01, dt =
         
         rates.append(rdt)
     
-    plt.plot(rates)
+    #◘plt.plot(rates)
     return rates
 
 if __name__ == "__main__":
