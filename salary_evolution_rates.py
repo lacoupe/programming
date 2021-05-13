@@ -26,10 +26,10 @@ def wage_growth_sample(skew_param =1, avg = 0.009, std = 0.01, N = 65):
     w_growths = skewnorm.rvs(skew_param, loc=0.009, scale=0.03, size=N)
     w_growths = np.round(w_growths,4)
     
-    plt.plot(w_growths)
-    plt.show()
-    plt.hist(w_growths, density=True, bins=30)
-    plt.show()
+    #plt.plot(w_growths)
+    #plt.show()
+    #plt.hist(w_growths, density=True, bins=30)
+    #plt.show()
     
     return w_growths
 
@@ -55,7 +55,7 @@ def nb_ue_p():
     else:
         nb_p = 3 # User will have 3 unemployment times in his life (proba = 1%)
 
-    print('Number of unemployment periods user will face : ', nb_p)
+    #print('Number of unemployment periods user will face : ', nb_p)
     return nb_p    
 
     
