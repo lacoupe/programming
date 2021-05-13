@@ -270,6 +270,16 @@ def simulation_len_q(t, end_t):
             break 
         
     return l, frac_s, frac_c
+
+def end_word():
+    
+    print('')
+    print('---------------------------------------------------------------------------')
+    print('-------------CONGRATULATION YOU JUST REACHED RETIREMENT AGE !--------------')
+    print('---------------------------------------------------------------------------')
+    print('')
+    print("Let's see your final situation:")
+    print('---------------------------------------------------------------------------')
     
 ####################TESTS######################
 
@@ -277,7 +287,7 @@ if __name__ == "__main__":
     
     #get_info_capital()        
     
-    first_simulation()   
+    l, frac_s, frac_c = first_simulation()   
     simulation_len_q(1, 40)
     
         
