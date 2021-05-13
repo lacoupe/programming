@@ -5,6 +5,8 @@ Created on Tue May  4 15:14:45 2021
 @author: Antoine
 """
 
+import matplotlib.pyplot as plt
+
 from account_class import Account
 from interest_rates import rate_evolution_sample
 from salary_class_2 import Salary
@@ -74,16 +76,14 @@ class user:
     ###################CYCLES FUNCTIONS###################
 
     
-    def run_single_cycle(self, frac_saving = 0.5, frac_consuming = 0.5):
+    def run_single_cycle(self, frac_saving = 0.5, frac_consuming = 0.5, first_sim = False):
         """
         This function is here to run a single cycle (User want to simulate one year only)
         Calls all needed classes methods to update salary, accounts, ...
         Create some single periods reports
+        The parameter first_sim allows to make several decision/report only if it is the first simulation
         """
-        
-        frac_saving = 0.5
-        frac_consuming = 0.5
-        
+                
         self.t += 1     
 
         
@@ -119,7 +119,10 @@ class user:
         #For each asset, update invest. value by P&L, print report
         for asset in [self.e_inv, self.t_inv, self.n_inv, self.g_inv]:
             asset.single_year_adj_1(self.t)
+        #Ask if user want to visualize plot of prices up to now
+        if not first_sim: self.assets_plot_decision()
         #Ask for possible new investments/sales depending on performance we display
+        if first_sim : self.assets_info_decision() #If it is the first simulation -> Ask for info about assets
         self.long_invest_decision() #Long transactions 
         self.short_invest_decision() #Short transactions
         #Update investments depending on new transactions
@@ -174,6 +177,9 @@ class user:
         #INVESTMENT STUFFS
         for asset in [self.e_inv, self.t_inv, self.n_inv, self.g_inv]:
             asset.multi_year_adj(beg, n, disp=True)
+        
+        #Ask if user want to visualize plot of prices up to now
+        self.assets_plot_decision()
             
         self.long_invest_decision() #Long transactions 
         self.short_invest_decision() #Short transactions
@@ -239,7 +245,34 @@ class user:
         print('Gold : CHF ', self.g_inv.balance_t + self.g_inv.net_movements_t)
         print('------------------------------------------------------')
 
-
+    def end_report(self):
+        """
+        function which create a summary of user's wealth at the end (at retirement)
+        """
+        print('\n')
+        print('------------------------------------------------------')
+        print('------------------RETIREMENT WEALTH-------------------')
+        print('------------------------------------------------------')
+        print('')
+        print('------------------------------------------------------')
+        print('Current Account Balance:')
+        print('------------------------------------------------------')
+        print('CHF %d'%(self.c_account.balance_t))
+        print('')
+        print('------------------------------------------------------')        
+        print('Saving Account Balance:')
+        print('------------------------------------------------------')
+        print('CHF %d'%(self.s_account.balance_t))
+        print('')
+        print('------------------------------------------------------')
+        print('Portfolio Positions:')
+        print('------------------------------------------------------')
+        print('Eatcoin : CHF ', self.e_inv.balance_t + self.e_inv.net_movements_t)
+        print('Teslo : CHF ', self.t_inv.balance_t + self.t_inv.net_movements_t)
+        print('Nestlo : CHF ', self.n_inv.balance_t + self.n_inv.net_movements_t)
+        print('Gold : CHF ', self.g_inv.balance_t + self.g_inv.net_movements_t)
+        print('------------------------------------------------------')        
+        
 
     ##################DECISION FUNCTIONS##################
 
@@ -330,6 +363,123 @@ class user:
         asset.withdraw(self.t, amt) #Withdraw the amount to related investment account
         
         if loop == True: self.short_invest_decision() #Contine asking him for any new transaction
+    
+    
+    def assets_plot(self):
+        
+        nb_y = self.t
+        nb_d = nb_y*365
+        
+        e_list = self.e_inv.asset.d_price[:nb_d+1]
+        t_list = self.t_inv.asset.d_price[:nb_d+1]
+        n_list = self.n_inv.asset.d_price[:nb_d+1]
+        g_list = self.g_inv.asset.d_price[:nb_d+1]
+        
+        time_line = range(0,nb_d+1)
+        
+
+        fig = plt.figure()
+        plt.plot(time_line, e_list, label='Eatcoin')
+        plt.plot(time_line, t_list, label='Teslo')
+        plt.plot(time_line, n_list, label='Nestlo')
+        plt.plot(time_line, g_list, label='Gold')
+        plt.legend(['Eatcoin', 'Teslo', 'Nestlo', 'Gold'], loc='upper left')
+        #plt.xticks(y_time_line)
+        plt.show()
+        
+    def assets_plot_decision(self):
+        """
+        Function which let user decide whether he wants to see a plot of assets available from time t=0
+        to time t --> Calls function assets_plot()
+        """
+        while True:
+            try:
+                on = input('Do you want see evolution plot of stocks ? yes/no ')
+                if on not in ['yes', 'Yes', 'no', 'No'] :
+                    raise ValueError
+            except ValueError:
+                print("Type yes or no to continue ")
+                continue
+            else : 
+                break
+
+        if on in ['no', 'No']: #Doesn't want to do any transfer
+            return
+        else:
+            self.assets_plot()
+    
+    def assets_info_decision(self):
+        """
+        Decision function which will allow to have informations about some stocks
+        If user needs informations -> call function asssets_info() to compute report
+        """
+        while True:
+            try:
+                on = input('Do you want any informations about stocks ? yes/no ')
+                if on not in ['yes', 'Yes', 'no', 'No'] :
+                    raise ValueError
+            except ValueError:
+                print("Type yes or no to continue ")
+                continue
+            else : 
+                break
+
+        if on in ['no', 'No']: #Doesn't want to do any transfer
+            return
+        else:
+            self.assets_info()
+            
+            loop = True
+            while loop == True:
+                while True:
+                    try:
+                        again = input('Do you need informations about other assets ? yes/no ')
+                        if again not in ['yes', 'Yes', 'no', 'No'] :
+                            raise ValueError
+                    except ValueError:
+                        print("Type yes or no to continue ")
+                        continue
+                    else : 
+                        break
+        
+                if again in ['no', 'No']: #Doesn't want to do any transfer
+                    loop = False
+                else:
+                    self.assets_info()
+                    loop = True
+
+    
+    def assets_info(self):
+        """
+        Function called by assets_info_decision() if user actually want asset information
+        Here he'll be able to chose which asset he wants information on
+        """
+        
+        print('')
+        print('Assets available: Eatcoin, Teslo, Nestlo, Gold')
+        while True:
+            try:
+                on = input('About which asset do you want informations ? Type exact name ')
+                if on not in ['Eatcoin', 'Teslo', 'Nestlo', 'Gold'] :
+                    raise ValueError
+            except ValueError:
+                print('Type a valid asset name please ...')
+                continue
+            else : 
+                break
+            
+        print('')
+        
+        if on == 'Eatcoin':
+            self.e_inv.asset.info()
+        elif on == 'Teslo':
+            self.t_inv.asset.info()
+        elif on == 'Nestlo':
+            self.n_inv.asset.info()
+        else :
+            self.g_inv.asset.info()
+
+    
     
     def long_invest_decision(self):
         """
@@ -492,6 +642,8 @@ class user:
             return
         
         #He answered yes, therefore we move to virtual casino
+        print('')
+        print('------------------------------------------------------')
         print('WELCOME TO CASINO ROULETTE !')
         print('------------------------------------------------------')
         print('(Amount available on current account : CHF %d)'%(bal))
@@ -528,15 +680,64 @@ class user:
                 play = True #Continue the loop
 
 
+    def end_reports_decision(self):
+        """
+        In addition to the global wealth report, the user will be able to ask for 
+        some detailed accounts / investments reports at the end of the game
+        """
+        
+        choices = '\n - 1 - Salary \n - 2 - Current Account \n - 3 - Saving Account \n - 4 - Eatcoin Investment \n - 5 - Teslo Investment \n - 6 - Nestlo Investment \n - 7 - Gold Investment'
+        print('')
+        print('Do you want any detailed reports about any of the following subjects:')
+        print(choices)
+        
+        loop = True
+        
+        while loop == True:
+        
+            while True:
+                try:
+                    on = input('Type either report number or "no" if you want to end the game: ')
+                    if on not in ['1', '2', '3', '4', '5', '6', '7', 'no', 'No'] :
+                        raise ValueError
+                except ValueError:
+                    print("Type either a number of the list or no to end the game ")
+                    continue
+                else : 
+                    break
+    
+            if on in ['no', 'No']: #Doesn't want to do any transfer
+                loop = False
+                return
+            elif on == '1':
+                self.wages.compute_salary_report(0, self.len_life)
+            elif on == '2':
+                self.c_account.compute_account_report(0, self.len_life)
+            elif on == '3':
+                self.s_account.compute_account_report(0, self.len_life)
+            elif on == '4':
+                self.e_inv.compute_investment_report(0, self.len_life)
+            elif on == '5':
+                self.t_inv.compute_investment_report(0, self.len_life)            
+            elif on == '6':
+                self.n_inv.compute_investment_report(0, self.len_life)
+            elif on == '7':
+                self.g_inv.compute_investment_report(0, self.len_life)
+        
+            
 ####################TESTS######################
 
 if __name__ == "__main__":
    
     
     antoine = user(25, 90000, 20000) 
+    antoine.assets_plot()
+    #antoine.end_report()
+    #antoine.end_reports_decision()
+    #antoine.assets_info_decision()
     #antoine.set_sav_dec()
-    antoine.run_single_cycle() 
-    antoine.casino_decision()
+    #antoine.run_single_cycle() 
+    #antoine.casino_decision()
     #antoine.run_cycle(10, 0.5, 0.4) 
     #antoine.run_single_cycle() 
     #antoine.transfer_decision()
