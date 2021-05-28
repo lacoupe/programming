@@ -34,7 +34,7 @@ def simulate_salary(sec, exp, ed):
                'IT','Law','Education','Healthcare', 'Industrial','Real Estate',\
                 'Public Services','Hospitality','Consulting and Management','Energy and utilities']
     
-    sal = [90000,85000,80000,75000,70000,65000,60000,55000,50000,45000,40000,35000,30000]
+    sal = [111432,92904,64824,107820,92904,102840,80820,77232,81120,99096,52944,117768,98388]
     
     Salaries = pd.DataFrame(
         {'Sector':sectors,
