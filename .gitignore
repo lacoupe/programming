@@ -134,3 +134,6 @@ dmypy.json
 
 # DS Store
 .DS_Store
+
+# flake8 init file
+.tox.ini

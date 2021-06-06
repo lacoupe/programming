@@ -1,24 +1,18 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Apr 19 15:29:27 2021
-
-@author: Antoine
-"""
-
 from math import sqrt
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
-def next_rate(rt, k, theta, sigma, dt = 1 ):
+
+def next_rate(rt, k, theta, sigma, dt=1):
     
     e = np.random.normal()
     
-    delta_rt = k*(theta-rt)*dt+sigma*sqrt(dt)*e
+    delta_rt = k * (theta - rt) * dt + sigma * sqrt(dt) * e
     
     return rt + delta_rt
 
 
-def rate_evolution_sample(r0 = 0.001, k = 0.2, theta = 0.045, sigma = 0.01, dt = 1, N = 65):
+def rate_evolution_sample(r0=0.001, k=0.2, theta=0.045, sigma=0.01, dt=1, N=65):
 
     """
     VARSICEK MODEL (c.f. https://yilifinhub.com/interest-rate-vasicek-model-simulation/)
@@ -52,14 +46,15 @@ def rate_evolution_sample(r0 = 0.001, k = 0.2, theta = 0.045, sigma = 0.01, dt =
         if i == 0:
             last_r = r0
         else:
-            last_r = rates[i-1]
+            last_r = rates[i - 1]
             
         rdt = next_rate(last_r, k, theta, sigma)
         
         rates.append(rdt)
     
-    #◘plt.plot(rates)
+    # plt.plot(rates)
     return rates
+
 
 if __name__ == "__main__":
     
