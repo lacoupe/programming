@@ -35,4 +35,4 @@ The project follows flake8 practices, in which several rules are overwritten in 
 | --------------- | ---------- |
 | TISSOT Antoine  |  ********  |
 | COUPET Léopold  |  16824047  |
-| LOPEZ Diego     |  ********  |
+| LOPEZ Diego     |  17401415  |
