@@ -253,7 +253,7 @@ def simulation_len_q(t, end_t):
         
     while True:
         try:
-            go = input('Alright, ready to step %d year(s) in future ? If yes type "ok": ' % (l))
+            go = input('Alright, ready to step %d year(s) in future ? If yes type "ok": ' % (length))
             if not go == 'ok':
                 raise ValueError
         except ValueError:
@@ -262,7 +262,7 @@ def simulation_len_q(t, end_t):
         else:
             break
         
-    return l, frac_s, frac_c
+    return length, frac_s, frac_c
 
 
 def end_word():
