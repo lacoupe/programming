@@ -297,10 +297,19 @@ class User:
             asset = self.g_inv
 
         print('Capital available: CHF ', self.s_account.balance_t)  # The capital he has available for investments
-        amt = float(input('How much do you want to invest in this asset ? '))
-        while amt > self.s_account.balance_t or amt < 0:  # He needs to have enough money on saving account for investing
-            amt = float(input('Enter a valid capital please ...'))
-
+        while True:
+            try:
+                amt = float(input('How much do you want to invest in this asset ? '))
+                if amt > self.s_account.balance_t: # He needs to have enough money on saving account for investing
+                    raise ValueError
+                if amt < 0:
+                    raise ValueError
+            except ValueError:
+                print("Enter a valid capital please ...")
+                continue
+            else:
+                break
+        
         self.s_account.instant_adjustment(self.t, - amt)  # Make instantaneous ajustment to saving account
         asset.deposit(self.t, amt)  # Increase the value of asset investment
         
@@ -337,15 +346,25 @@ class User:
         val = asset.balance_t + asset.net_movements_t  # (need to add net_movements_t if other movements have been made without having been adjusted for till now)
         
         print('Owned asset value: CHF ', val)
-        amt = float(input('How much do you want to sell in this asset ?'))
-        while amt > val or amt < 0:
-            amt = float(input('Enter a valid amount please ...'))
+        while True:
+            try:
+                amt = float(input('How much do you want to sell in this asset ?'))
+                if amt > val: # He needs to have enough money on saving account for investing
+                    raise ValueError
+                if amt < 0:
+                    raise ValueError
+            except ValueError:
+                print("Enter a valid capital please ...")
+                continue
+            else:
+                break
 
         self.s_account.instant_adjustment(self.t, amt)  # Make instantaneous ajustment to saving account
         asset.withdraw(self.t, amt)  # Withdraw the amount to related investment account
         
         if loop:
             self.short_invest_decision()  # Contine asking him for any new transaction
+
     
     def assets_plot(self):
         try:
