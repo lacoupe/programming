@@ -5,13 +5,13 @@
 ```
 ├── test.py                         
 ├── functions
+|   ├── interactions.py
 |   ├── interest_rates.py           
 |   ├── roulette.py                 
 |   ├── salary_evolution_rates.py
 |   ├── stock.py
 ├── modules 
 |   ├── account.py
-|   ├── interactions.py
 |   ├── investment.py
 |   ├── salary.py
 |   ├── user.py
