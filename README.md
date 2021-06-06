@@ -22,6 +22,7 @@
 ## Running the project
 
 The version of Python used in this project is Python 3.8.
+
 To install the required librairies, run `pip install -r requirements.txt`.
 
 To run the project, run `python test.py`.
