@@ -1,4 +1,4 @@
-from modules import interactions
+from functions import interactions
 from modules.user import User
 
 
