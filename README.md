@@ -7,7 +7,7 @@
 ├── functions
 |   ├── interest_rates.py           
 |   ├── roulette.py                 
-|   ├── salaray_evolution_rates.py
+|   ├── salary_evolution_rates.py
 |   ├── stock.py
 ├── modules 
 |   ├── account.py
