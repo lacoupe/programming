@@ -348,25 +348,27 @@ class User:
             self.short_invest_decision()  # Contine asking him for any new transaction
     
     def assets_plot(self):
-        
-        nb_y = self.t
-        nb_d = nb_y * 365
-        
-        e_list = self.e_inv.asset.d_price[:nb_d + 1]
-        t_list = self.t_inv.asset.d_price[:nb_d + 1]
-        n_list = self.n_inv.asset.d_price[:nb_d + 1]
-        g_list = self.g_inv.asset.d_price[:nb_d + 1]
-        
-        time_line = range(0, nb_d + 1)
-        
-        # fig = plt.figure()
-        plt.plot(time_line, e_list, label='Eatcoin')
-        plt.plot(time_line, t_list, label='Teslo')
-        plt.plot(time_line, n_list, label='Nestlo')
-        plt.plot(time_line, g_list, label='Gold')
-        plt.legend(['Eatcoin', 'Teslo', 'Nestlo', 'Gold'], loc='upper left')
-        # plt.xticks(y_time_line)
-        plt.show()
+        try:
+            nb_y = self.t
+            nb_d = nb_y * 365
+            
+            e_list = self.e_inv.asset.d_price[:nb_d + 1]
+            t_list = self.t_inv.asset.d_price[:nb_d + 1]
+            n_list = self.n_inv.asset.d_price[:nb_d + 1]
+            g_list = self.g_inv.asset.d_price[:nb_d + 1]
+            
+            time_line = range(0, nb_d + 1)
+            
+            # fig = plt.figure()
+            plt.plot(time_line, e_list, label='Eatcoin')
+            plt.plot(time_line, t_list, label='Teslo')
+            plt.plot(time_line, n_list, label='Nestlo')
+            plt.plot(time_line, g_list, label='Gold')
+            plt.legend(['Eatcoin', 'Teslo', 'Nestlo', 'Gold'], loc='upper left')
+            # plt.xticks(y_time_line)
+            plt.show()
+        except:
+            print('Had some issues when graph tried to be displayed ...')
         
     def assets_plot_decision(self):
         """
