@@ -24,25 +24,25 @@ class Stock:
         self.years = number_years
 
         if risk == 'very_high':
-            self.mu = 0.3
+            self.mu = 0.1
             self.sigma = 0.6
             self.lam = 10
             self.m = 0
             self.v = 0.2
         elif risk == 'high':
-            self.mu = 0.2
+            self.mu = 0.075
             self.sigma = 0.4
             self.lam = 2
             self.m = -0.1
             self.v = 0.1
         elif risk == 'medium':
-            self.mu = 0.15
+            self.mu = 0.05
             self.sigma = 0.2
             self.lam = 1
             self.m = -0.05
             self.v = 0.1
         elif risk == 'low':
-            self.mu = 0.1
+            self.mu = 0.025
             self.sigma = 0.05
             self.lam = 0.2
             self.m = 0
